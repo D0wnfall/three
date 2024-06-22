@@ -1,173 +1,87 @@
 import * as THREE from 'three';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
-import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
-import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
-import { Kirby } from './kirby';
-import { Input } from './input';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-class MinMaxGUIHelper {
-    constructor(obj, minProp, maxProp, minDif) {
-      this.obj = obj;
-      this.minProp = minProp;
-      this.maxProp = maxProp;
-      this.minDif = minDif;
-    }
-    get min() {
-      return this.obj[this.minProp];
-    }
-    set min(v) {
-      this.obj[this.minProp] = v;
-      this.obj[this.maxProp] = Math.max(this.obj[this.maxProp], v + this.minDif);
-    }
-    get max() {
-      return this.obj[this.maxProp];
-    }
-    set max(v) {
-      this.obj[this.maxProp] = v;
-      this.min = this.min;  // this will call the min setter
-    }
-  }
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-//Setup canvas render
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000);
+renderer.setPixelRatio(window.devicePixelRatio);
 
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-//Setup Scene and Camera
+document.body.appendChild(renderer.domElement);
+
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-const size = 1;
-// const camera = new THREE.OrthographicCamera( - size, size, size, - size, 0.1,1000 );
-camera.position.set( 0, 0, 100 );
-camera.zoom = 0.2;
-camera.lookAt( 0, 0, 0 );
 
-
-function updateCamera() {
-    camera.updateProjectionMatrix();
-}
-   
-const gui = new GUI();
-// gui.add(camera, 'fov', 1, 180).onChange(updateCamera);
-const minMaxGUIHelper = new MinMaxGUIHelper(camera, 'near', 'far', 0.1);
-gui.add(minMaxGUIHelper, 'min', 0.1, 50, 0.1).name('near').onChange(updateCamera);
-gui.add(minMaxGUIHelper, 'max', 0.1, 1000, 0.1).name('far').onChange(updateCamera);
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+camera.position.set(4, 5, 11);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.target.set(0, 5, 0);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.minDistance = 5;
+controls.maxDistance = 20;
+controls.minPolarAngle = 0.5;
+controls.maxPolarAngle = 1.5;
+controls.autoRotate = false;
+controls.target = new THREE.Vector3(0, 1, 0);
 controls.update();
 
+const groundGeometry = new THREE.PlaneGeometry(20, 20, 32, 32);
+groundGeometry.rotateX(-Math.PI / 2);
+const groundMaterial = new THREE.MeshStandardMaterial({
+  color: 0x555555,
+  side: THREE.DoubleSide
+});
+const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
+groundMesh.castShadow = false;
+groundMesh.receiveShadow = true;
+scene.add(groundMesh);
 
-//Hemisphere Light
-var skyColor = 0xB1E1FF;  // light blue
-var groundColor = 0xB97A20;  // brownish orange
-var intensity = 0.5;
-var light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
-scene.add(light);
+const spotLight = new THREE.SpotLight(0xffffff, 300, 100, 0.8,1);
+spotLight.position.set(0, 25, 0);
+spotLight.castShadow = true;
+spotLight.shadow.bias = -0.0001;
+scene.add(spotLight);
 
-//Directional Light
-var color = 0xFFFFFF;
-light = new THREE.DirectionalLight(color, intensity);
-light.position.set(0, 10, 0);
-light.target.position.set(-5, 0, 0);
-scene.add(light);
-scene.add(light.target);
+const spotLightHelper = new THREE.SpotLightHelper( spotLight );
+scene.add( spotLightHelper );
 
-//Point Light
-intensity = 50;
-color = 0xFFFF00;
-light = new THREE.PointLight(color, intensity);
-light.position.set(0,10,0);
-scene.add(light);
+const loader = new GLTFLoader().setPath('resources/Models/');
+loader.load('scene.gltf', (gltf) => {
+  console.log('loading model');
+  const mesh = gltf.scene;
 
-//Spot Light
-color = 0xFF0000;
-light = new THREE.SpotLight(color, intensity);
-light.position.set(10,10,0);
-scene.add(light);
+  mesh.traverse((child) => {
+    if (child.isMesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
 
+  mesh.position.set(0, 1.05, -1);
+  scene.add(mesh);
 
-
-const planeSize = 40;
-var planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
-var planeMat = new THREE.MeshPhongMaterial({
-    color: 0x888888,
-    side: THREE.DoubleSide,
+  document.getElementById('progress-container').style.display = 'none';
+}, (xhr) => {
+  console.log(`loading ${xhr.loaded / xhr.total * 100}%`);
+}, (error) => {
+  console.error(error);
 });
 
-var mesh = new THREE.Mesh(planeGeo, planeMat);
-mesh.rotation.x = Math.PI * -.5;
-scene.add(mesh);
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
-{
-    const cubeSize = 4;
-    const cubeGeo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-    const cubeMat = new THREE.MeshPhongMaterial({color: '#8AC'});
-    const mesh = new THREE.Mesh(cubeGeo, cubeMat);
-    mesh.position.set(cubeSize + 1, cubeSize / 2, 0);
-    scene.add(mesh);
-  }
-  {
-    const sphereRadius = 3;
-    const sphereWidthDivisions = 32;
-    const sphereHeightDivisions = 16;
-    const sphereGeo = new THREE.SphereGeometry(sphereRadius, sphereWidthDivisions, sphereHeightDivisions);
-    const sphereMat = new THREE.MeshPhongMaterial({color: '#CA8'});
-    const mesh = new THREE.Mesh(sphereGeo, sphereMat);
-    mesh.position.set(-sphereRadius - 1, sphereRadius + 2, 0);
-    scene.add(mesh);
-  }
-
-  const onProgress = function ( xhr ) {
-
-    if ( xhr.lengthComputable ) {
-
-      const percentComplete = xhr.loaded / xhr.total * 100;
-      console.log( percentComplete.toFixed( 2 ) + '% downloaded' );
-
-    }
-
-  };
-
-  //Load Obj
-  new MTLLoader()
-  .setPath( 'resources/' )
-  .load( 'magic_book_OBJ.mtl', function ( materials ) {
-
-    materials.preload();
-    console.log("masuk")
-
-    new OBJLoader()
-      .setMaterials( materials )
-      .setPath( 'resources/' )
-      .load( 'magic_book_OBJ.obj', function ( object ) {
-
-        scene.add( object );
-
-      }, onProgress );
-
-  } );
-
-
-const kirby = new Kirby(scene);
-const input = new Input();
-
-
-
-var time_prev = 0
-function animate(time) {
-	var dt = time - time_prev
-    dt*=0.1;
-
-    
-	renderer.render( scene, camera );
-
-  kirby.run(dt, input.keyPressed);
-
-    time_prev = time;
-    requestAnimationFrame( animate );
-    
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
 }
-requestAnimationFrame( animate );
+
+animate();
