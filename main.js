@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -50,8 +51,11 @@ scene.add(spotLight);
 const spotLightHelper = new THREE.SpotLightHelper( spotLight );
 scene.add( spotLightHelper );
 
+const light = new THREE.AmbientLight( 0x202020 ); // soft white light
+scene.add( light );
+
 const loader = new GLTFLoader().setPath('resources/Models/');
-loader.load('scene.gltf', (gltf) => {
+loader.load('maps.gltf', (gltf) => {
   console.log('loading model');
   const mesh = gltf.scene;
 
@@ -71,6 +75,8 @@ loader.load('scene.gltf', (gltf) => {
 }, (error) => {
   console.error(error);
 });
+
+
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
