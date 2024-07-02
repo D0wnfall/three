@@ -122,7 +122,7 @@ export class Character{
         this.mesh.position.add(fowardVector.multiplyScalar(direction.x * this.speed * dt));
         this.mesh.position.add(rightVector.multiplyScalar(direction.z * this.speed * dt));
 
-        this.camera.rotation.x = this.cameraRotationVector.x;
+        // this.camera.rotation.x = this.cameraRotationVector.x;
         this.camera.setup(this.mesh.position, this.rotationVector);
     }
 }

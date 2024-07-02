@@ -18,7 +18,7 @@ class Main {
 
 
         //plane
-        const loader = new GLTFLoader().setPath('resources/Models/').load('maps.gltf', (gltf) => {
+        const loader = new GLTFLoader().setPath('resources/Models/').load('Scene.gltf', (gltf) => {
             gltf.scene.scale.setScalar(1);
             gltf.scene.position.set(0,0,0);
             gltf.scene.shadowMap = true;
@@ -67,33 +67,45 @@ class Main {
         pointLight.castShadow = true;
         this.scene.add(pointLight);
 
+        pointLight = new THREE.PointLight(0xffc000, 2);
+        pointLight.position.set(-5,3,20);
+        pointLight.castShadow = true;
+        this.scene.add(pointLight);
+
+        pointLight = new THREE.PointLight(0xffc000, 2);
+        pointLight.position.set(-14,3,0.7);
+        pointLight.castShadow = true;
+        this.scene.add(pointLight);
+
+
         //lilin
-        var lilin = new THREE.PointLight(0xffc000, 0.1);
-        lilin.position.set(4.9,2,-0.7);
+        var lilin = new THREE.PointLight(0xffc000, 0.3);
+        lilin.position.set(4.9,1,-0.7);
         lilin.castShadow = true;
         this.scene.add(lilin);
 
-        var lilin = new THREE.PointLight(0xffc000, 0.1);
-        lilin.position.set(6,3,13);
-        lilin.castShadow = true;
-        this.scene.add(lilin);
-        
-        var lilin = new THREE.PointLight(0xffc000, 0.1);
-        lilin.position.set(9,2,16);
+        var lilin = new THREE.PointLight(0xffc000, 0.3);
+        lilin.position.set(0.225,1,-4.50);
         lilin.castShadow = true;
         this.scene.add(lilin);
 
-        var lilin = new THREE.PointLight(0xffc000, 0.1);
-        lilin.position.set(2,2,16.5);
+        var lilin = new THREE.PointLight(0xffc000, 0.3);
+        lilin.position.set(5.27,1.25,11.20);
         lilin.castShadow = true;
         this.scene.add(lilin);
 
-        var lilin = new THREE.PointLight(0xffc000, 0.1);
-        lilin.position.set(-4,1,13.9);
-        lilin.castShadow = true;
-        this.scene.add(lilin);
+        //lentera
+        var lentera = new THREE.PointLight(0xffc000, 3);
+        lentera.position.set(-2,1.25,0);
+        lentera.castShadow = true;
+        this.scene.add(lentera);
 
-        var pointLightHelper = new THREE.PointLightHelper(lilin, 1);
+        var lentera = new THREE.PointLight(0xffc000, 3);
+        lentera.position.set(2,1.25,0);
+        lentera.castShadow = true;
+        this.scene.add(lentera);
+
+        var pointLightHelper = new THREE.PointLightHelper(pointLight, 1);
         this.scene.add(pointLightHelper);
 
         // var spotLight = new THREE.SpotLight(0xffc000, 10, 100, Math.PI);
