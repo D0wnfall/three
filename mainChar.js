@@ -46,6 +46,7 @@ export class Character{
             loader.load('Sword And Shield Idle.fbx', (fbx) => {onLoad('idle', fbx)});
             loader.load('Sword And Shield Walk.fbx', (fbx) => {onLoad('start', fbx)});
         });
+        
     }
     update(dt){
         if (!this.mesh) return;
@@ -65,21 +66,21 @@ export class Character{
         }
 
         if (this.controller.keys['pitchup']) {
-            this.cameraRotationVector.x += 0.05;
+            this.cameraRotationVector.x += 0.05 ;
             this.camera.pitch += 0.05;
         }
         if (this.controller.keys['pitchdown']) {
-            this.cameraRotationVector.x += -0.05;
-            this.camera.pitch -= 0.05;
+            this.cameraRotationVector.x += -0.05 ;
+            this.camera.pitch -= 0.05 ;
         }
 
         if (this.controller.keys['yawleft']) {
-            this.rotationVector.y += 0.05;
-            this.mesh.rotation.y += -0.05;
+            this.rotationVector.y += 0.05 ;
+            this.mesh.rotation.y += -0.05 ;
         }
         if (this.controller.keys['yawright']) {
-            this.rotationVector.y += -0.05;
-            this.mesh.rotation.y += 0.05;
+            this.rotationVector.y += -0.05 ;
+            this.mesh.rotation.y += 0.05 ;
         }
 
         if (this.controller.keys['1']) {
@@ -255,4 +256,6 @@ export class ThirdPersonCamera{
         this.camera.lookAt(temp);
     }
 }
+
+
 
