@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {Character,CharacterController, ThirdPersonCamera} from './mainChar.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
 
 class Main {
@@ -17,7 +18,7 @@ class Main {
 
 
         //plane
-        const loader = new GLTFLoader().setPath('resources/Models/').load('Scene.gltf', (gltf) => {
+        const loader = new GLTFLoader().setPath('resources/Models/').load('maps.gltf', (gltf) => {
             gltf.scene.scale.setScalar(1);
             gltf.scene.position.set(0,0,0);
             gltf.scene.shadowMap = true;
@@ -36,32 +37,32 @@ class Main {
         plane.castShadow = true;
 
         //lampu dinding
-        var pointLight = new THREE.PointLight(0xffc000, 3);
+        var pointLight = new THREE.PointLight(0xffc000, 2);
         pointLight.position.set(2,3,11);
         pointLight.castShadow = true;
         this.scene.add(pointLight);
 
-        pointLight = new THREE.PointLight(0xffc000, 3);
+        pointLight = new THREE.PointLight(0xffc000, 2);
         pointLight.position.set(5,3,-6);
         pointLight.castShadow = true;
         this.scene.add(pointLight);
 
-        pointLight = new THREE.PointLight(0xffc000, 3);
+        pointLight = new THREE.PointLight(0xffc000, 2);
         pointLight.position.set(-6,3,-6);
         pointLight.castShadow = true;
         this.scene.add(pointLight);
 
-        pointLight = new THREE.PointLight(0xffc000, 3);
+        pointLight = new THREE.PointLight(0xffc000, 2);
         pointLight.position.set(2,3,21);
         pointLight.castShadow = true;
         this.scene.add(pointLight);
 
-        pointLight = new THREE.PointLight(0xffc000, 3);
+        pointLight = new THREE.PointLight(0xffc000, 2);
         pointLight.position.set(-6,3,11);
         pointLight.castShadow = true;
         this.scene.add(pointLight);
 
-        pointLight = new THREE.PointLight(0xffc000, 3);
+        pointLight = new THREE.PointLight(0xffc000, 2);
         pointLight.position.set(-10,3,19);
         pointLight.castShadow = true;
         this.scene.add(pointLight);
@@ -72,16 +73,36 @@ class Main {
         lilin.castShadow = true;
         this.scene.add(lilin);
 
+        var lilin = new THREE.PointLight(0xffc000, 0.1);
+        lilin.position.set(6,3,13);
+        lilin.castShadow = true;
+        this.scene.add(lilin);
+        
+        var lilin = new THREE.PointLight(0xffc000, 0.1);
+        lilin.position.set(9,2,16);
+        lilin.castShadow = true;
+        this.scene.add(lilin);
+
+        var lilin = new THREE.PointLight(0xffc000, 0.1);
+        lilin.position.set(2,2,16.5);
+        lilin.castShadow = true;
+        this.scene.add(lilin);
+
+        var lilin = new THREE.PointLight(0xffc000, 0.1);
+        lilin.position.set(-4,1,13.9);
+        lilin.castShadow = true;
+        this.scene.add(lilin);
+
         var pointLightHelper = new THREE.PointLightHelper(lilin, 1);
         this.scene.add(pointLightHelper);
 
-        var spotLight = new THREE.SpotLight(0xffc000, 10, 100, Math.PI);
-        spotLight.position.set(0,5,0);
-        spotLight.castShadow = true;
-        this.scene.add(spotLight);
+        // var spotLight = new THREE.SpotLight(0xffc000, 10, 100, Math.PI);
+        // spotLight.position.set(0,5,0);
+        // spotLight.castShadow = true;
+        // this.scene.add(spotLight);
 
-        var spotLightHelper = new THREE.SpotLightHelper(spotLight, 1);
-        this.scene.add(spotLightHelper);
+        // var spotLightHelper = new THREE.SpotLightHelper(spotLight, 1);
+        // this.scene.add(spotLightHelper);
 
         this.Character = new Character(
             new ThirdPersonCamera(

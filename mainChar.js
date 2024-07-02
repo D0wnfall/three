@@ -8,7 +8,7 @@ export class Character{
         this.scene = scene;
         this.speed = speed;
         this.rotationVector = new THREE.Vector3();
-
+        this.cameraRotationVector = new THREE.Vector3();
         this.state = 'idle';
         this.animations = {};
         
@@ -30,7 +30,7 @@ export class Character{
             });
             this.mesh = fbx;
             this.scene.add(this.mesh);
-            this.rotationVector.y = Math.PI/2   ;
+            this.rotationVector.y = Math.PI/2;
 
             this.mixer = new THREE.AnimationMixer(this.mesh);
             var onLoad =(animName, anim) => {
@@ -51,18 +51,49 @@ export class Character{
         if (!this.mesh) return;
         var direction = new THREE.Vector3(0,0,0);
         if (this.controller.keys['left']){
-            direction.z = -5;   
+            direction.z = -2;   
             this.rotationVector.y += 0.01;
             this.mesh.rotation.y += -0.01;
         }if (this.controller.keys['right']){
-            direction.z = 5;
-            this.rotationVector.y -= 0.01;
+            direction.z = 2;
+            this.rotationVector.y += -0.01;
             this.mesh.rotation.y += 0.01;
         }if (this.controller.keys['up']){
-            direction.x = 5;
+            direction.x = 2;
         }if (this.controller.keys['down']){
-            direction.x = -5;
+            direction.x = -2;
         }
+
+        if (this.controller.keys['pitchup']) {
+            this.cameraRotationVector.x += 0.01;
+            this.camera.pitch += 0.01;
+        }
+        if (this.controller.keys['pitchdown']) {
+            this.cameraRotationVector.x += -0.01;
+            this.camera.pitch -= 0.01;
+        }
+
+        if (this.controller.keys['yawleft']) {
+            this.rotationVector.y += 0.01;
+            this.mesh.rotation.y += -0.01;
+        }
+        if (this.controller.keys['yawright']) {
+            this.rotationVector.y += -0.01;
+            this.mesh.rotation.y += 0.01;
+        }
+
+        if (this.controller.keys['1']) {
+            this.cameraMode = 'firstPerson';
+        } else if (this.controller.keys['2']) {
+            this.cameraMode = 'thirdPerson';
+        }
+
+        if (this.cameraMode === 'firstPerson') {
+            this.camera.setup(this.mesh.position, this.firstPersonOffset);
+        } else if (this.cameraMode === 'thirdPerson') {
+            this.camera.setup(this.mesh.position, this.thirdPersonOffset);
+        }
+
         // direction.x = 1;
         if(direction.length()== 0){
             if(this.animations['idle']){
@@ -91,19 +122,26 @@ export class Character{
         this.mesh.position.add(fowardVector.multiplyScalar(direction.x * this.speed * dt));
         this.mesh.position.add(rightVector.multiplyScalar(direction.z * this.speed * dt));
 
-        // this.mesh.rotation.y = -(this.rotationVector.y);
+        this.camera.rotation.x = this.cameraRotationVector.x;
         this.camera.setup(this.mesh.position, this.rotationVector);
     }
 }
 
 
 export class CharacterController{
-    constructor(){
+    constructor(camera){
+        this.camera = camera;
         this.keys = {
             "left": false,
             "right": false,
             "up": false,
-            "down": false
+            "down": false,
+            "pitchup": false,
+            "pitchdown": false,
+            "yawleft": false,
+            "yawright": false,
+            '1': false,
+            '2': false,
         };
 
         document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
@@ -128,6 +166,28 @@ export class CharacterController{
             case 'S':
                 this.keys.down = true;
                 break;
+            case 'f':
+            case 'F':
+                this.keys.pitchup = true;
+                break;
+            case 'g':
+            case 'G':
+                this.keys.pitchdown = true;
+                break;
+            case 'q':
+            case 'Q':
+                this.keys.yawleft = true;
+                break;
+            case 'e':
+            case 'E':
+                this.keys.yawright = true;
+                break;
+            case '1':
+                this.keys['1'] = true;
+                break;
+            case '2':
+                this.keys['2'] = true;
+                break;
         }
     }
     onKeyUp(event){
@@ -148,6 +208,28 @@ export class CharacterController{
             case 'S':
                 this.keys.down = false;
                 break;
+            case 'f':
+            case 'F':
+                this.keys.pitchup = false;
+                break;
+            case 'g':
+            case 'G':
+                this.keys.pitchdown = false;
+                break;
+            case 'q':
+            case 'Q':
+                this.keys.yawleft = false;
+                break;
+            case 'e':
+            case 'E':
+                this.keys.yawright = false;
+                break;
+            case '1':
+                this.keys['1'] = false;
+                break;
+            case '2':
+                this.keys['2'] = false;
+                break;
         }
     }
 }
@@ -155,25 +237,22 @@ export class CharacterController{
 export class ThirdPersonCamera{
     constructor(camera, positionOffset, targetOffset){
         this.camera = camera;
-        // this.positionOffset = new THREE.Vector3(0, 2, 5);
-        // this.targetOffset = new THREE.Vector3(0, 1, 0);
         this.positionOffset = positionOffset;
         this.targetOffset = targetOffset;
     }
     setup(target, angle){
         var temp = new THREE.Vector3();
         temp.copy(this.positionOffset);
+        temp.applyAxisAngle(new THREE.Vector3(1,0,0), angle.x);
         temp.applyAxisAngle(new THREE.Vector3(0,1,0), angle.y);
         temp.applyAxisAngle(new THREE.Vector3(0,0,1), angle.z);
 
         temp.addVectors(target, temp);
         this.camera.position.copy(temp);
 
-
         temp = new THREE.Vector3();
         temp.addVectors(target, this.targetOffset);
         this.camera.lookAt(temp);
-
-        // this.camera.rotation.y = angle.y;
     }
 }
+

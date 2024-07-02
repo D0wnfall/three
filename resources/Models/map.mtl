@@ -1,0 +1,55 @@
+﻿newmtl MI_Wall_06_A
+	map_Kd MI_Wall_06_A_D.bmp
+	map_Ks MI_Wall_06_A_S.bmp
+	bump MI_Wall_06_A_N.bmp
+
+newmtl MI_Atlas_01
+	map_Kd MI_Atlas_01_D.bmp
+	map_Ks MI_Atlas_01_S.bmp
+	bump MI_Atlas_01_N.bmp
+
+newmtl MI_Floor_01_A
+	map_Kd MI_Floor_01_A_D.bmp
+	map_Ks MI_Floor_01_A_S.bmp
+	bump MI_Floor_01_A_N.bmp
+
+newmtl MI_Atlas_01_E
+	map_Kd MI_Atlas_01_E_D.bmp
+	map_Ks MI_Atlas_01_E_S.bmp
+	bump MI_Atlas_01_E_N.bmp
+
+newmtl MI_CineMat_CameraBody
+	map_Kd MI_CineMat_CameraBody_D.bmp
+	map_Ks MI_CineMat_CameraBody_S.bmp
+	bump MI_CineMat_CameraBody_N.bmp
+
+newmtl MI_CineMat_CamViewFinder
+	map_Kd MI_CineMat_CamViewFinder_D.bmp
+	map_Ks MI_CineMat_CamViewFinder_S.bmp
+	bump MI_CineMat_CamViewFinder_N.bmp
+
+newmtl MI_Atlas_01_Wind_01
+	map_Kd MI_Atlas_01_Wind_01_D.bmp
+	map_Ks MI_Atlas_01_Wind_01_S.bmp
+	bump MI_Atlas_01_Wind_01_N.bmp
+
+newmtl M_Base
+	map_Kd M_Base_D.bmp
+	map_Ks M_Base_S.bmp
+	bump M_Base_N.bmp
+
+newmtl MI_Atlas_01_Wind_Plant_01
+	map_Kd MI_Atlas_01_Wind_Plant_01_D.bmp
+	map_Ks MI_Atlas_01_Wind_Plant_01_S.bmp
+	bump MI_Atlas_01_Wind_Plant_01_N.bmp
+
+newmtl MI_Atlas_01_Wind_Plant_02
+	map_Kd MI_Atlas_01_Wind_Plant_02_D.bmp
+	map_Ks MI_Atlas_01_Wind_Plant_02_S.bmp
+	bump MI_Atlas_01_Wind_Plant_02_N.bmp
+
+newmtl MI_Atlas_01_Wind_03
+	map_Kd MI_Atlas_01_Wind_03_D.bmp
+	map_Ks MI_Atlas_01_Wind_03_S.bmp
+	bump MI_Atlas_01_Wind_03_N.bmp
+
