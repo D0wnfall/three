@@ -19,11 +19,12 @@ class Main {
 
         //plane
         const loader = new GLTFLoader().setPath('resources/Models/').load('Scene.gltf', (gltf) => {
-            gltf.scene.scale.setScalar(1);
-            gltf.scene.position.set(0,0,0);
-            gltf.scene.shadowMap = true;
-            gltf.scene.castShadow = true;
-            gltf.scene.receiveShadow = true;
+            gltf.scene.traverse((object) => {
+                if (object.isMesh) {
+                  object.castShadow = true;
+                  object.receiveShadow = true;
+                }
+              });
             this.scene.add(gltf.scene);
         });
 

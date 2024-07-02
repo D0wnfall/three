@@ -52,12 +52,12 @@ export class Character{
         var direction = new THREE.Vector3(0,0,0);
         if (this.controller.keys['left']){
             direction.z = -2;   
-            this.rotationVector.y += 0.01;
-            this.mesh.rotation.y += -0.01;
+            this.rotationVector.y += 0.05;
+            this.mesh.rotation.y += -0.05;
         }if (this.controller.keys['right']){
             direction.z = 2;
-            this.rotationVector.y += -0.01;
-            this.mesh.rotation.y += 0.01;
+            this.rotationVector.y += -0.05;
+            this.mesh.rotation.y += 0.05;
         }if (this.controller.keys['up']){
             direction.x = 2;
         }if (this.controller.keys['down']){
@@ -65,21 +65,21 @@ export class Character{
         }
 
         if (this.controller.keys['pitchup']) {
-            this.cameraRotationVector.x += 0.01;
-            this.camera.pitch += 0.01;
+            this.cameraRotationVector.x += 0.05;
+            this.camera.pitch += 0.05;
         }
         if (this.controller.keys['pitchdown']) {
-            this.cameraRotationVector.x += -0.01;
-            this.camera.pitch -= 0.01;
+            this.cameraRotationVector.x += -0.05;
+            this.camera.pitch -= 0.05;
         }
 
         if (this.controller.keys['yawleft']) {
-            this.rotationVector.y += 0.01;
-            this.mesh.rotation.y += -0.01;
+            this.rotationVector.y += 0.05;
+            this.mesh.rotation.y += -0.05;
         }
         if (this.controller.keys['yawright']) {
-            this.rotationVector.y += -0.01;
-            this.mesh.rotation.y += 0.01;
+            this.rotationVector.y += -0.05;
+            this.mesh.rotation.y += 0.05;
         }
 
         if (this.controller.keys['1']) {
