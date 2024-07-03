@@ -257,5 +257,180 @@ export class ThirdPersonCamera{
     }
 }
 
+export class FirstPersonCamera {
+    constructor(camera, targetOffset) {
+        this.camera = camera;
+        this.targetOffset = targetOffset;
+    }
 
+    setup(target, angle) {
+        var temp = new THREE.Vector3();
+        temp.copy(this.targetOffset);
+        temp.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle.y);
+        temp.addVectors(target, temp);
+        this.camera.position.copy(temp);
+
+        temp = new THREE.Vector3();
+        temp.addVectors(target, new THREE.Vector3(0, 0, -1)); // Offset for head height
+        this.camera.lookAt(temp);
+    }
+}
+
+export class FreeRoamCamera {
+    constructor(camera) {
+        this.camera = camera;
+        this.moveSpeed = 5;
+        this.rotationSpeed = 1;
+        this.keys = {
+            "forward": false,
+            "backward": false,
+            "left": false,
+            "right": false,
+            "up": false,
+            "down": false,
+            "pitchUp": false,
+            "pitchDown": false,
+            "yawLeft": false,
+            "yawRight": false,
+            "rollLeft": false,
+            "rollRight": false
+        };
+
+        document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
+        document.addEventListener('keyup', (e) => this.onKeyUp(e), false);
+    }
+       onKeyDown(event) {
+        switch (event.key) {
+            case 'i':
+            case 'I':
+                this.keys.forward = true;
+                break;
+            case 'k':
+            case 'K':
+                this.keys.backward = true;
+                break;
+            case 'j':
+            case 'J':
+                this.keys.left = true;
+                break;
+            case 'l':
+            case 'L':
+                this.keys.right = true;
+                break;
+            case 'q':
+                this.keys.rollLeft = true;
+                break;
+            case 'e':
+                this.keys.rollRight = true;
+                break;
+            case 'r':
+                this.keys.up = true;
+                break;
+            case 'f':
+                this.keys.down = true;
+                break;
+            case 'ArrowUp':
+                this.keys.pitchUp = true;
+                break;
+            case 'ArrowDown':
+                this.keys.pitchDown = true;
+                break;
+            case 'ArrowRight':
+                this.keys.yawLeft = true;
+                break;
+            case 'ArrowLeft':
+                this.keys.yawRight = true;
+                break;
+        }
+    }
+
+    onKeyUp(event) {
+        switch (event.key) {
+            case 'i':
+            case 'I':
+                this.keys.forward = false;
+                break;
+            case 'k':
+            case 'K':
+                this.keys.backward = false;
+                break;
+            case 'j':
+            case 'J':
+                this.keys.left = false;
+                break;
+            case 'l':
+            case 'L':
+                this.keys.right = false;
+                break;
+            case 'q':
+                this.keys.rollLeft = false;
+                break;
+            case 'e':
+                this.keys.rollRight = false;
+                break;
+            case 'r':
+                this.keys.up = false;
+                break;
+            case 'f':
+                this.keys.down = false;
+                break;
+            case 'ArrowUp':
+                this.keys.pitchUp = false;
+                break;
+            case 'ArrowDown':
+                this.keys.pitchDown = false;
+                break;
+            case 'ArrowRight':
+                this.keys.yawLeft = false;
+                break;
+            case 'ArrowLeft':
+                this.keys.yawRight = false;
+                break;
+        }
+    }
+    setup(target, angle){
+        
+    }
+    update(dt) {
+        var moveSpeed = this.moveSpeed * dt;
+        var rotationSpeed = this.rotationSpeed * dt;
+
+        if (this.keys.forward) {
+            this.camera.translateZ(-moveSpeed);
+        }
+        if (this.keys.backward) {
+            this.camera.translateZ(moveSpeed);
+        }
+        if (this.keys.left) {
+            this.camera.translateX(-moveSpeed);
+        }
+        if (this.keys.right) {
+            this.camera.translateX(moveSpeed);
+        }
+        if (this.keys.up) {
+            this.camera.translateY(moveSpeed);
+        }
+        if (this.keys.down) {
+            this.camera.translateY(-moveSpeed);
+        }
+        if (this.keys.pitchUp) {
+            this.camera.rotation.x -= rotationSpeed;
+        }
+        if (this.keys.pitchDown) {
+            this.camera.rotation.x += rotationSpeed;
+        }
+        if (this.keys.yawLeft) {
+            this.camera.rotation.y -= rotationSpeed;
+        }
+        if (this.keys.yawRight) {
+            this.camera.rotation.y += rotationSpeed;
+        }
+        if (this.keys.rollLeft) {
+            this.camera.rotation.z -= rotationSpeed;
+        }
+        if (this.keys.rollRight) {
+            this.camera.rotation.z += rotationSpeed;
+        }
+    }
+}
 

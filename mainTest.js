@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {Character,CharacterController, ThirdPersonCamera} from './mainChar.js';
+import {Character,CharacterController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera} from './mainChar.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { Reflector } from 'three/addons/objects/Reflector.js';
@@ -15,7 +15,7 @@ class Main {
             antialias: true,
             canvas: canvasReference});
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setClearColor(0x000fff,1);
+        this.renderer.setClearColor(0x0f0f0f,1);
         this.renderer.shadowMap.enabled = true;
         //glass
         const glassMaterial = new THREE.MeshPhysicalMaterial();
@@ -142,6 +142,20 @@ class Main {
 
         // reflector
         // window.addEventListener( 'resize', onWindowResize );
+        //event listener
+        window.addEventListener('wheel', this.onMouseWheel.bind(this), false);
+        window.addEventListener('keydown', this.onKeyDown.bind(this), false);
+
+        //camera
+        this.firstPersonCamera = new FirstPersonCamera(
+            this.camera, new THREE.Vector3(-3,2,0), new THREE.Vector3(0,0,0)
+        );
+        this.thirdPersonCamera = new ThirdPersonCamera(
+            this.camera, new THREE.Vector3(-5,5,0), new THREE.Vector3(0,0,0)
+        );
+        this.freeRoamCamera = new FreeRoamCamera(this.camera,100); // Speed set to 5 for FreeRoamCamera
+
+        this.currentCamera = this.thirdPersonCamera;
 
         this.Character = new Character(
             new ThirdPersonCamera(
@@ -186,8 +200,68 @@ class Main {
     
 
     static render(dt){
+        this.checkBoundaries(dt);
         this.Character.update(dt);
+        
+        // Update camera if it's a FreeRoamCamera
+        if (this.currentCamera instanceof FreeRoamCamera) {
+            this.currentCamera.update(dt);
+        }
+
         this.renderer.render(this.scene, this.camera);
+    }
+    
+    static checkBoundaries(dt) {
+        if (!this.Character.mesh) return;
+
+        var position = this.Character.mesh.position;
+        var speed = this.Character.speed * dt;
+
+        // Define the boundaries
+        var halfSize = this.planeSize / 2;
+        var minX = -halfSize + speed;
+        var maxX = halfSize - speed;
+        var minZ = -halfSize + speed;
+        var maxZ = halfSize - speed;
+
+        // Adjust the speed based on the boundaries
+        if (position.x < minX) {
+            this.Character.mesh.position.x = minX;
+        } else if (position.x > maxX) {
+            this.Character.mesh.position.x = maxX;
+        }
+
+        if (position.z < minZ) {
+            this.Character.mesh.position.z = minZ;
+        } else if (position.z > maxZ) {
+            this.Character.mesh.position.z = maxZ;
+        }
+    }
+    
+    static onMouseWheel(event) {
+        if (event.deltaY > 0) {
+            this.camera.fov = Math.min(100, this.camera.fov + 1);
+        } else {
+            this.camera.fov = Math.max(30, this.camera.fov - 1);
+        }
+        this.camera.updateProjectionMatrix();
+    }
+
+
+    static onKeyDown(event) {
+        if (event.key === 'c' || event.key === 'C') { // 'c' key to switch camera
+            if (this.currentCamera instanceof FirstPersonCamera) {
+                this.currentCamera = this.thirdPersonCamera;
+            } else if (this.currentCamera instanceof ThirdPersonCamera) {
+                this.currentCamera = this.freeRoamCamera;
+            } else {
+                this.currentCamera = this.firstPersonCamera;
+            }
+            this.Character.camera = this.currentCamera; // Update Character's camera directly
+        }
+        if (event.key === ' ') {
+            this.Character.startMoving();
+        }
     }
 }
 
