@@ -32,6 +32,104 @@ class Main {
         sphere.castShadow = true;
         this.scene.add(sphere)
         
+        //cube collision
+        var cube = new THREE.Mesh(new THREE.BoxGeometry(6,2,5), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 2;
+        cube.position.x = 5;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(2,2,13), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = -2;
+        cube.position.x = 5;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(8,2,5), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 2;
+        cube.position.x = -6;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(2,2,13), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = -2;
+        cube.position.x = -9.5;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(3,2,3), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = -5;
+        cube.position.x = 0;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(1.5,2,8), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 8.25;
+        cube.position.x = -10.2;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(0.3,2,0.3), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 12;
+        cube.position.x = -2;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+        
+        cube = new THREE.Mesh(new THREE.BoxGeometry(0.3,2,0.3), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 12;
+        cube.position.x = -6;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(7.5,2,15), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 13;
+        cube.position.x = 6;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(20,2,1), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 24;
+        cube.position.x = -3;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(1,2,10), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 20;
+        cube.position.x = -6;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(0.3,2,0.3), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 20;
+        cube.position.x = -2;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(5,2,4), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 21;
+        cube.position.x = -12;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube = new THREE.Mesh(new THREE.BoxGeometry(1,2,30), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 10;
+        cube.position.x = -14;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube= new THREE.Mesh(new THREE.BoxGeometry(5,2,4), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = 21;
+        cube.position.x = -12;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+        cube= new THREE.Mesh(new THREE.BoxGeometry(5,2,4), new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.0 }));
+        cube.position.z = -5;
+        cube.position.x = -12;
+        cube.position.y = 0.5;
+        this.scene.add(cube);
+
+
         //plane
         const loader = new GLTFLoader().setPath('resources/Models/').load('Scene.gltf', (gltf) => {
             gltf.scene.traverse((object) => {
@@ -117,11 +215,6 @@ class Main {
 
         //lilin
         var lilin = new THREE.PointLight(0xffc000, 2);
-        lilin.position.set(0.225,1,-4.50);
-        lilin.castShadow = true;
-        this.scene.add(lilin);
-
-        var lilin = new THREE.PointLight(0xffc000, 2);
         lilin.position.set(5.27,1.25,11.20);
         lilin.castShadow = true;
         this.scene.add(lilin);
@@ -137,8 +230,6 @@ class Main {
         lentera.castShadow = true;
         this.scene.add(lentera);
 
-        var pointLightHelper = new THREE.PointLightHelper(pointLight, 1);
-        this.scene.add(pointLightHelper);
 
         // reflector
         // window.addEventListener( 'resize', onWindowResize );
@@ -166,6 +257,8 @@ class Main {
         );
         
     }
+
+
 
     // loadModel(path){
     //     var loaderNPC = new FBXLoader();
@@ -240,9 +333,11 @@ class Main {
     
     static onMouseWheel(event) {
         if (event.deltaY > 0) {
-            this.camera.fov = Math.min(100, this.camera.fov + 1);
+            this.camera.position.z = Math.max(1, this.camera.position.z + 1);
+            this.camera.position.y = Math.max(1, this.camera.position.y + 1);
         } else {
-            this.camera.fov = Math.max(30, this.camera.fov - 1);
+            this.camera.position.z = Math.min(100, this.camera.position.z - 1);
+            this.camera.position.y = Math.max(1, this.camera.position.y - 1);
         }
         this.camera.updateProjectionMatrix();
     }
@@ -277,7 +372,7 @@ class Main {
 
 // }
 var clock = new THREE.Clock();
-Main.init();
+Main.init()
 requestAnimationFrame(animate); 
 function animate(){
     Main.render(clock.getDelta());
